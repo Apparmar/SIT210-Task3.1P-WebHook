@@ -1,0 +1,40 @@
+/***********************************************************************
+* Task 3_1P - Particle - Sending data to the web
+* .
+*	Date				Author				Reason
+*	27 March 2021		Amit Parmar			Initial version
+* 
+*/
+
+
+
+// Include the Adafruit header file for the DHT22 humidity and temperature sensor
+#include <Adafruit_DHT.h>
+
+//#include "Adafruit_DHT.h"
+// Define which digital pin will be used and what is the type of the DHT
+#define DHTPIN 2
+#define DHTTYPE 22
+
+// Initiate the instance of the DHT
+DHT dht(DHTPIN, DHTTYPE);
+String tempOne;
+
+void setup() {
+  dht.begin();
+}
+
+//Inside the loop, read the temperature every 30 seconds
+void loop() {
+    // Get the temperature as float data type
+    float temperature = dht.getTempCelcius();
+    
+    // Convert the float data to string with 1 decimal place
+    tempOne = String::format("%.1f",temperature);
+
+    // Publish the data to temp column of the channel.
+    Particle.publish("temp", tempOne, PRIVATE);
+  
+    // wait for 30 seconds
+    delay(30000);
+}
